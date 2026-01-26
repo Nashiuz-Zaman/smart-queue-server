@@ -10,6 +10,7 @@ import {
   throwInternalServerError,
 } from "../../utils";
 
+/* Signup User */
 export const signup = catchAsync(async (req: Request, res: Response) => {
   const token = signupUser(req.body);
 
@@ -21,8 +22,10 @@ export const signup = catchAsync(async (req: Request, res: Response) => {
   return throwInternalServerError();
 });
 
+/* Login User */
 export const login = catchAsync(async (req: Request, res: Response) => {
   const token = await loginUser(req.body);
+
   if (token) {
     setCookie(res, { cookieName: "accessToken", cookieContent: token });
     return sendSuccess(res);
@@ -31,17 +34,20 @@ export const login = catchAsync(async (req: Request, res: Response) => {
   return throwInternalServerError();
 });
 
-export const demoLogin = async (_req: Request, res: Response) => {
+/* Demo Login */
+export const demoLogin = catchAsync(async (_req: Request, res: Response) => {
   const token = await demoUserLogin();
+
   if (token) {
     setCookie(res, { cookieName: "accessToken", cookieContent: token });
     return sendSuccess(res);
   }
 
   return throwInternalServerError();
-};
+});
 
-export const logout = (_req: Request, res: Response) => {
+/* Logout User */
+export const logout = catchAsync(async (_req: Request, res: Response) => {
   cleanCookie(res, "accessToken");
   return sendSuccess(res);
-};
+});

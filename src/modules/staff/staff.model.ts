@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import { IStaff } from "./staff.type";
+import { STAFF_AVAILIBILITY_OPTIONS, STAFF_TYPES } from "../../constants/staff";
 
 const staffSchema = new Schema<IStaff>(
   {
@@ -11,6 +12,7 @@ const staffSchema = new Schema<IStaff>(
     serviceType: {
       type: String,
       required: true,
+      enum: STAFF_TYPES,
     },
     dailyCapacity: {
       type: Number,
@@ -20,8 +22,8 @@ const staffSchema = new Schema<IStaff>(
     },
     availabilityStatus: {
       type: String,
-      enum: ["AVAILABLE", "ON_LEAVE"],
-      default: "AVAILABLE",
+      enum: STAFF_AVAILIBILITY_OPTIONS,
+      default: STAFF_AVAILIBILITY_OPTIONS[0],
     },
     isActive: {
       type: Boolean,

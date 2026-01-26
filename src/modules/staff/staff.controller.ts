@@ -4,7 +4,7 @@ import { StaffService } from "./staff.service";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendSuccess } from "../../utils/sendSuccess";
 
-// ----------------------------- Create Staff -----------------------------
+/* Create Staff */
 const createStaff = catchAsync(async (req: Request, res: Response) => {
   const result = await StaffService.createStaff(req.body);
 
@@ -15,7 +15,7 @@ const createStaff = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// ----------------------------- Get All Staff -----------------------------
+/* Get All Staff */
 const getAllStaff = catchAsync(async (_req: Request, res: Response) => {
   const result = await StaffService.getAllStaff();
 
@@ -24,7 +24,7 @@ const getAllStaff = catchAsync(async (_req: Request, res: Response) => {
   });
 });
 
-// ----------------------------- Get Single Staff -----------------------------
+/* Get Single Staff */
 const getSingleStaff = catchAsync(async (req: Request, res: Response) => {
   const result = await StaffService.getSingleStaff(req.params.id);
 
@@ -33,7 +33,7 @@ const getSingleStaff = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// ----------------------------- Update Staff -----------------------------
+/* Update Staff */
 const updateStaff = catchAsync(async (req: Request, res: Response) => {
   const result = await StaffService.updateStaff(req.params.id, req.body);
 
@@ -43,7 +43,7 @@ const updateStaff = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// ----------------------------- Delete Staff (Soft) -----------------------------
+/* Delete Staff (Soft) */
 const deleteStaff = catchAsync(async (req: Request, res: Response) => {
   const result = await StaffService.deleteStaff(req.params.id);
 
@@ -53,10 +53,18 @@ const deleteStaff = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+/* Get Staff Types (for dropdowns) */
+const getStaffTypes = catchAsync(async (_req: Request, res: Response) => {
+  sendSuccess(res, {
+    data: STAFF_TYPES,
+  });
+});
+
 export const StaffController = {
   createStaff,
   getAllStaff,
   getSingleStaff,
   updateStaff,
   deleteStaff,
+  getStaffTypes, // <- added
 };

@@ -1,8 +1,8 @@
-export type TStaffAvailability = "AVAILABLE" | "ON_LEAVE";
+import { TStaffAvailability, TStaffType } from "../../constants/staff";
 
 export interface IStaff {
   name: string;
-  serviceType: string; // e.g. Doctor, Consultant
+  serviceType: TStaffType;
   dailyCapacity: number; // max appointments per day
   availabilityStatus: TStaffAvailability;
   isActive: boolean;
