@@ -1,21 +1,25 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
-import { env } from "../config/env";
+import { catchAsync, throwUnauthorized, verifyToken } from "../utils";
 
-export const protect = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const token = req.cookies?.accessToken;
-  if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
+export interface AuthRequest extends Request {
+  email?: string;
+}
 
-  try {
-    jwt.verify(token, env.JWT_SECRET);
-    next();
-  } catch {
-    res.status(401).json({ message: "Invalid token" });
-  }
-};
+export const protect = catchAsync(
+  async (req: AuthRequest, res: Response, next: NextFunction) => {
+    const token = req.cookies?.accessToken;
+
+    if (!token) {
+      return throwUnauthorized();
+    }
+
+    const result = await verifyToken(token, process.env.JWT_SECRET as string);
+
+    if (!result.valid) {
+      return throwUnauthorized();
+    }
+
+    req.email = result.decoded.email;
+    return next();
+  },
+);
