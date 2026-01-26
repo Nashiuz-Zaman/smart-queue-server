@@ -1,21 +1,12 @@
 import { Router } from "express";
-import {
-  createStaffHandler,
-  getAllStaffHandler,
-  getStaffByIdHandler,
-  updateStaffHandler,
-  deleteStaffHandler,
-} from "./staff.controller";
-import { protect } from "../../middlewares/auth.middleware";
+import { StaffController } from "./staff.controller";
 
 const router = Router();
 
-router.use(protect); // all routes protected
-
-router.post("/", createStaffHandler);
-router.get("/", getAllStaffHandler);
-router.get("/:id", getStaffByIdHandler);
-router.put("/:id", updateStaffHandler);
-router.delete("/:id", deleteStaffHandler);
+router.post("/", StaffController.createStaff);
+router.get("/", StaffController.getAllStaff);
+router.get("/:id", StaffController.getSingleStaff);
+router.patch("/:id", StaffController.updateStaff);
+router.delete("/:id", StaffController.deleteStaff);
 
 export default router;

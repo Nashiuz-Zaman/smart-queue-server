@@ -1,53 +1,62 @@
 import { Request, Response } from "express";
-import * as staffService from "./staff.service";
+import httpStatus from "http-status";
+import { StaffService } from "./staff.service";
+import { catchAsync } from "../../utils/catchAsync";
+import { sendSuccess } from "../../utils/sendSuccess";
 
-export const createStaffHandler = async (req: Request, res: Response) => {
-  try {
-    const staff = await staffService.createStaff(req.body);
-    res.status(201).json(staff);
-  } catch (err: any) {
-    res.status(400).json({ message: err.message });
-  }
-};
+// ----------------------------- Create Staff -----------------------------
+const createStaff = catchAsync(async (req: Request, res: Response) => {
+  const result = await StaffService.createStaff(req.body);
 
-export const getAllStaffHandler = async (_req: Request, res: Response) => {
-  try {
-    const staff = await staffService.getAllStaff();
-    res.json(staff);
-  } catch (err: any) {
-    res.status(500).json({ message: err.message });
-  }
-};
+  sendSuccess(res, {
+    code: httpStatus.CREATED,
+    message: "Staff created successfully",
+    data: result,
+  });
+});
 
-export const getStaffByIdHandler = async (req: Request, res: Response) => {
-  try {
-    const staff = await staffService.getStaffById(req.params.id as string);
-    if (!staff) return res.status(404).json({ message: "Staff not found" });
-    res.json(staff);
-  } catch (err: any) {
-    res.status(500).json({ message: err.message });
-  }
-};
+// ----------------------------- Get All Staff -----------------------------
+const getAllStaff = catchAsync(async (_req: Request, res: Response) => {
+  const result = await StaffService.getAllStaff();
 
-export const updateStaffHandler = async (req: Request, res: Response) => {
-  try {
-    const staff = await staffService.updateStaff(
-      req.params.id as string,
-      req.body,
-    );
-    if (!staff) return res.status(404).json({ message: "Staff not found" });
-    res.json(staff);
-  } catch (err: any) {
-    res.status(400).json({ message: err.message });
-  }
-};
+  sendSuccess(res, {
+    data: result,
+  });
+});
 
-export const deleteStaffHandler = async (req: Request, res: Response) => {
-  try {
-    const staff = await staffService.deleteStaff(req.params.id as string);
-    if (!staff) return res.status(404).json({ message: "Staff not found" });
-    res.json({ message: "Staff deleted" });
-  } catch (err: any) {
-    res.status(500).json({ message: err.message });
-  }
+// ----------------------------- Get Single Staff -----------------------------
+const getSingleStaff = catchAsync(async (req: Request, res: Response) => {
+  const result = await StaffService.getSingleStaff(req.params.id);
+
+  sendSuccess(res, {
+    data: result,
+  });
+});
+
+// ----------------------------- Update Staff -----------------------------
+const updateStaff = catchAsync(async (req: Request, res: Response) => {
+  const result = await StaffService.updateStaff(req.params.id, req.body);
+
+  sendSuccess(res, {
+    message: "Staff updated successfully",
+    data: result,
+  });
+});
+
+// ----------------------------- Delete Staff (Soft) -----------------------------
+const deleteStaff = catchAsync(async (req: Request, res: Response) => {
+  const result = await StaffService.deleteStaff(req.params.id);
+
+  sendSuccess(res, {
+    message: "Staff deleted successfully",
+    data: result,
+  });
+});
+
+export const StaffController = {
+  createStaff,
+  getAllStaff,
+  getSingleStaff,
+  updateStaff,
+  deleteStaff,
 };

@@ -1,21 +1,38 @@
-import { StaffModel, IStaff } from "./staff.model";
+import { StaffModel } from "./staff.model";
+import { IStaff } from "./staff.type";
 
-export const createStaff = async (data: IStaff) => {
-  return StaffModel.create(data);
+const createStaff = async (payload: IStaff) => {
+  return StaffModel.create(payload);
 };
 
-export const getAllStaff = async () => {
-  return StaffModel.find();
+const getAllStaff = async () => {
+  return StaffModel.find({ isActive: true }).sort({ createdAt: -1 });
 };
 
-export const getStaffById = async (id: string) => {
+const getSingleStaff = async (id: string) => {
   return StaffModel.findById(id);
 };
 
-export const updateStaff = async (id: string, data: Partial<IStaff>) => {
-  return StaffModel.findByIdAndUpdate(id, data, { new: true });
+const updateStaff = async (id: string, payload: Partial<IStaff>) => {
+  return StaffModel.findByIdAndUpdate(id, payload, {
+    new: true,
+    runValidators: true,
+  });
 };
 
-export const deleteStaff = async (id: string) => {
-  return StaffModel.findByIdAndDelete(id);
+// Soft delete
+const deleteStaff = async (id: string) => {
+  return StaffModel.findByIdAndUpdate(
+    id,
+    { isActive: false },
+    { new: true },
+  );
+};
+
+export const StaffService = {
+  createStaff,
+  getAllStaff,
+  getSingleStaff,
+  updateStaff,
+  deleteStaff,
 };
