@@ -10,7 +10,7 @@ import serviceRouter from "./modules/services/service.route";
 import activityRouter from "./modules/activity/activity.route";
 import dashboardRouter from "./modules/dashboard/dashoard.route";
 
-export const app = express();
+const app = express();
 
 // app.set("trust proxy", 1);
 app.use(
@@ -43,3 +43,5 @@ app.all("*", (req: Request, _: Response, next: NextFunction) => {
 });
 
 app.use(errorMiddleware);
+
+export default app;
