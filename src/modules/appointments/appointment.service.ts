@@ -107,7 +107,10 @@ export const AppointmentService = {
     const service = await ServiceModel.findOne({ name: data.serviceName });
     if (!service) return throwBadRequest("Selected service does not exist");
 
-    let assignedStaffId = data.assignedStaff;
+    let assignedStaffId =
+      data.assignedStaff && String(data.assignedStaff) !== ""
+        ? data.assignedStaff
+        : undefined;
 
     const newStart = new Date(data.dateTime);
     const newEnd = new Date(newStart.getTime() + service.duration * 60 * 1000);
