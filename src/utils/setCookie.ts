@@ -22,7 +22,7 @@ export const setCookie = (
     sameSite = "none",
     domain = process.env.NODE_ENV !== "production"
       ? "localhost"
-      : "lumora-server.vercel.app",
+      : "smart-queue-client.vercel.app",
     path = "/",
   }: ICookieOptions
 ) => {
