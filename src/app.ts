@@ -15,7 +15,7 @@ export const app = express();
 // app.set("trust proxy", 1);
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://smart-queue-client.vercel.app",
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
