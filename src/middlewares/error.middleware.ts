@@ -6,9 +6,8 @@ export const errorMiddleware = (
   err: Error,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
-  console.log(err);
   // 1. AppError: trusted operational errors
   if (err instanceof AppError) {
     return res.status(err.statusCode).json({
@@ -42,9 +41,6 @@ export const errorMiddleware = (
       message: `Duplicate value for ${dupKey}`,
     });
   }
-
-  // 5. Unexpected internal error
-  console.error("UNEXPECTED ERROR 💥", err);
 
   return res.status(500).json({
     status: "error",

@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 import { StaffService } from "./staff.service";
-import { catchAsync } from "../../utils/catchAsync";
-import { sendSuccess } from "../../utils/sendSuccess";
+import { catchAsync, sendSuccess } from "../../utils";
+import { STAFF_TYPES } from "../../constants/staff";
 
 /* Create Staff */
 const createStaff = catchAsync(async (req: Request, res: Response) => {
@@ -66,5 +66,5 @@ export const StaffController = {
   getSingleStaff,
   updateStaff,
   deleteStaff,
-  getStaffTypes, // <- added
+  getStaffTypes,
 };

@@ -1,13 +1,13 @@
 import { Router } from "express";
 import { StaffController } from "./staff.controller";
 
-const router = Router();
+const staffRouter = Router();
 
-router.post("/", StaffController.createStaff);
-router.get("/", StaffController.getAllStaff);
-router.get("/:id", StaffController.getSingleStaff);
-router.patch("/:id", StaffController.updateStaff);
-router.delete("/:id", StaffController.deleteStaff);
-router.get("/types/all", StaffController.getStaffTypes);
+staffRouter.post("/", StaffController.createStaff);
+staffRouter.get("/", StaffController.getAllStaff);
+staffRouter.get("/:id", StaffController.getSingleStaff);
+staffRouter.patch("/:id", StaffController.updateStaff);
+staffRouter.delete("/:id", StaffController.deleteStaff);
+staffRouter.get("/types/all", StaffController.getStaffTypes);
 
-export default router;
+export default staffRouter;

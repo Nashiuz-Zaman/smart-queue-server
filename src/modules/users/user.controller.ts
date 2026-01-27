@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
-import { demoUserLogin, loginUser, signupUser } from "./user.service";
-
-import { UserModel } from "./user.model";
+import { UserService } from "./user.service";
 import {
   catchAsync,
   cleanCookie,
@@ -9,14 +7,15 @@ import {
   setCookie,
   throwInternalServerError,
 } from "../../utils";
+import { AuthRequest } from "../../middlewares/auth.middleware";
 
 /* Signup User */
 export const signup = catchAsync(async (req: Request, res: Response) => {
-  const token = signupUser(req.body);
+  const { user, token } = await UserService.signupUser(req.body);
 
   if (token) {
     setCookie(res, { cookieName: "accessToken", cookieContent: token });
-    return sendSuccess(res);
+    return sendSuccess(res, { data: user });
   }
 
   return throwInternalServerError();
@@ -24,11 +23,11 @@ export const signup = catchAsync(async (req: Request, res: Response) => {
 
 /* Login User */
 export const login = catchAsync(async (req: Request, res: Response) => {
-  const token = await loginUser(req.body);
+  const { user, token } = await UserService.loginUser(req.body);
 
   if (token) {
     setCookie(res, { cookieName: "accessToken", cookieContent: token });
-    return sendSuccess(res);
+    return sendSuccess(res, { data: user });
   }
 
   return throwInternalServerError();
@@ -36,11 +35,24 @@ export const login = catchAsync(async (req: Request, res: Response) => {
 
 /* Demo Login */
 export const demoLogin = catchAsync(async (_req: Request, res: Response) => {
-  const token = await demoUserLogin();
+  const { user, token } = await UserService.demoUserLogin();
 
   if (token) {
     setCookie(res, { cookieName: "accessToken", cookieContent: token });
-    return sendSuccess(res);
+    return sendSuccess(res, { data: user });
+  }
+
+  return throwInternalServerError();
+});
+
+/* Current User */
+export const checkAuth = catchAsync(async (req: AuthRequest, res) => {
+  const { email } = req;
+
+  const user = await UserService.getUser(email as string);
+
+  if (user?._id) {
+    return sendSuccess(res, { data: user });
   }
 
   return throwInternalServerError();

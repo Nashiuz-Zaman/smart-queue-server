@@ -1,17 +1,17 @@
 import { UserModel } from "./user.model";
-
-import { AppError } from "../../utils/appError";
 import { ILocalLoginRequest, ISignupRequest } from "./user.type";
 import { generateToken, throwBadRequest } from "../../utils";
 import { env } from "../../config/env";
 
-export const signupUser = async (userData: ISignupRequest) => {
-  const existingUser = await UserModel.findOne({ email: userData.email });
+export const signupUser = async (signupData: ISignupRequest) => {
+  const existingUser = await UserModel.findOne({ email: signupData.email });
   if (existingUser) {
     return throwBadRequest("Email already in use");
   }
 
-  const user = await UserModel.create(userData);
+  const user = await UserModel.create(signupData);
+  const userWithoutPassword = user.toObject();
+  delete userWithoutPassword.password;
 
   const token = generateToken(
     { email: user.email, userId: user._id.toString() },
@@ -19,7 +19,7 @@ export const signupUser = async (userData: ISignupRequest) => {
     "3d",
   );
 
-  return token;
+  return { user, token };
 };
 
 export const loginUser = async (loginData: ILocalLoginRequest) => {
@@ -37,7 +37,7 @@ export const loginUser = async (loginData: ILocalLoginRequest) => {
     "3d",
   );
 
-  return token;
+  return { user, token };
 };
 
 export const demoUserLogin = async () => {
@@ -50,11 +50,25 @@ export const demoUserLogin = async () => {
     });
   }
 
+  const userWithoutPassword = demoUser.toObject();
+  delete userWithoutPassword.password;
+
   const token = generateToken(
     { email: demoUser.email, userId: demoUser._id.toString() },
     env.JWT_SECRET,
     "3d",
   );
 
-  return token;
+  return { user: userWithoutPassword, token };
+};
+
+export const getUser = async (email: string) => {
+  return await UserModel.findOne({ email }, { password: 0 });
+};
+
+export const UserService = {
+  signupUser,
+  loginUser,
+  demoUserLogin,
+  getUser,
 };
