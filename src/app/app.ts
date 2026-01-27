@@ -1,14 +1,14 @@
 import express, { NextFunction, Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import appointmentRouter from "./modules/appointments/appointment.route";
-import { errorMiddleware } from "./middlewares/error.middleware";
-import { AppError } from "./classes";
-import userRouter from "./modules/users/user.routes";
-import staffRouter from "./modules/staff/staff.route";
-import serviceRouter from "./modules/services/service.route";
-import activityRouter from "./modules/activity/activity.route";
-import dashboardRouter from "./modules/dashboard/dashoard.route";
+import appointmentRouter from "../modules/appointments/appointment.route";
+import { errorMiddleware } from "../middlewares/error.middleware";
+import { AppError } from "../classes";
+import userRouter from "../modules/users/user.routes";
+import staffRouter from "../modules/staff/staff.route";
+import serviceRouter from "../modules/services/service.route";
+import activityRouter from "../modules/activity/activity.route";
+import dashboardRouter from "../modules/dashboard/dashoard.route";
 
 const app = express();
 
