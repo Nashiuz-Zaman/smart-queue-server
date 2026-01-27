@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 import { IActivityLog } from "./activity.type";
 
 const activitySchema = new Schema<IActivityLog>({
@@ -9,3 +9,5 @@ const activitySchema = new Schema<IActivityLog>({
   staffId: { type: Schema.Types.ObjectId, ref: "Staff" },
   customerName: { type: String },
 });
+
+export const ActivityModel = model<IActivityLog>("Activity", activitySchema);

@@ -1,5 +1,5 @@
-import { ActivityModel } from "./activity.model";
 import { IActivityLog } from "./activity.type";
+import { ActivityModel } from "./activity.model";
 
 export const ActivityService = {
   log: async ({
