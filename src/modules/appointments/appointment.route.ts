@@ -1,13 +1,23 @@
 import { Router } from "express";
 import { AppointmentController } from "./appointment.controller";
 
-const router = Router();
+const appointmentRouter = Router();
 
 // ----------------------------- Routes -----------------------------
-router.get("/", AppointmentController.getAppointments);
-router.get("/services", AppointmentController.getUniqueServices);
-router.get("/staff/:staffType", AppointmentController.getStaffByType);
-router.post("/", AppointmentController.createAppointment);
-router.patch("/:id", AppointmentController.updateAppointment);
+appointmentRouter.get("/", AppointmentController.getAppointments);
+appointmentRouter.get("/services", AppointmentController.getUniqueServices);
+appointmentRouter.get(
+  "/staff/:staffType",
+  AppointmentController.getStaffByType,
+);
+appointmentRouter.post("/", AppointmentController.createAppointment);
+appointmentRouter.patch("/:id", AppointmentController.updateAppointment);
 
-export default router;
+// ----------------------------- Waiting Queue Routes -----------------------------
+appointmentRouter.get("/waiting-queue", AppointmentController.getWaitingQueue);
+appointmentRouter.post(
+  "/waiting-queue/assign/:staffId",
+  AppointmentController.assignFromQueue,
+);
+
+export default appointmentRouter;

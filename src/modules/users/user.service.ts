@@ -10,16 +10,9 @@ export const signupUser = async (signupData: ISignupRequest) => {
   }
 
   const user = await UserModel.create(signupData);
-  const userWithoutPassword = user.toObject();
-  delete userWithoutPassword.password;
+  if (user._id) return true;
 
-  const token = generateToken(
-    { email: user.email, userId: user._id.toString() },
-    env.JWT_SECRET,
-    "3d",
-  );
-
-  return { user, token };
+  return false;
 };
 
 export const loginUser = async (loginData: ILocalLoginRequest) => {

@@ -9,16 +9,17 @@ import {
 } from "../../utils";
 import { AuthRequest } from "../../middlewares/auth.middleware";
 
+const cookieMaxAge = 3 * 24 * 60 * 60 * 1000;
+
 /* Signup User */
 export const signup = catchAsync(async (req: Request, res: Response) => {
-  const { user, token } = await UserService.signupUser(req.body);
+  const isCreated = await UserService.signupUser(req.body);
 
-  if (token) {
-    setCookie(res, { cookieName: "accessToken", cookieContent: token });
-    return sendSuccess(res, { data: user });
+  if (isCreated) {
+    return sendSuccess(res);
   }
 
-  return throwInternalServerError();
+  return throwInternalServerError("User sigunp failed");
 });
 
 /* Login User */
@@ -26,7 +27,11 @@ export const login = catchAsync(async (req: Request, res: Response) => {
   const { user, token } = await UserService.loginUser(req.body);
 
   if (token) {
-    setCookie(res, { cookieName: "accessToken", cookieContent: token });
+    setCookie(res, {
+      cookieName: "accessToken",
+      cookieContent: token,
+      maxAge: cookieMaxAge,
+    });
     return sendSuccess(res, { data: user });
   }
 
@@ -38,7 +43,11 @@ export const demoLogin = catchAsync(async (_req: Request, res: Response) => {
   const { user, token } = await UserService.demoUserLogin();
 
   if (token) {
-    setCookie(res, { cookieName: "accessToken", cookieContent: token });
+    setCookie(res, {
+      cookieName: "accessToken",
+      cookieContent: token,
+      maxAge: cookieMaxAge,
+    });
     return sendSuccess(res, { data: user });
   }
 

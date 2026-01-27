@@ -41,4 +41,31 @@ export const AppointmentController = {
       message: "Appointment updated successfully",
     });
   }),
+  getWaitingQueue: catchAsync(async (_req: Request, res: Response) => {
+    const waitingQueue = await AppointmentService.getWaitingQueue();
+
+    // Add queue positions dynamically
+    const queueWithPosition = waitingQueue.map((appt, idx) => ({
+      ...appt.toObject(),
+      queuePosition: idx + 1,
+    }));
+
+    sendSuccess(res, { data: queueWithPosition });
+  }),
+  assignFromQueue: catchAsync(async (req: Request, res: Response) => {
+    const { staffId } = req.params;
+    const assignedAppointment =
+      await AppointmentService.assignFromQueue(staffId);
+
+    if (!assignedAppointment) {
+      return sendSuccess(res, {
+        message: "No eligible appointments in waiting queue",
+      });
+    }
+
+    sendSuccess(res, {
+      data: assignedAppointment,
+      message: "Appointment assigned from waiting queue",
+    });
+  }),
 };
