@@ -45,21 +45,32 @@ export const hasTimeConflict = async ({
 // ----------------------------- Service -----------------------------
 export const AppointmentService = {
   getAppointments: async (filters?: IAppointmentFilter) => {
-    const query: any = {};
-    if (filters?.serviceName) query.serviceName = filters.serviceName;
-    if (filters?.assignedStaff) query.assignedStaff = filters.assignedStaff;
-    if (filters?.dateTime) {
-      const start = new Date(filters.dateTime);
-      start.setHours(0, 0, 0, 0);
-      const end = new Date(filters.dateTime);
-      end.setHours(23, 59, 59, 999);
-      query.dateTime = { $gte: start, $lte: end };
-    }
+  const query: any = {};
 
-    return AppointmentModel.find(query)
-      .populate("assignedStaff")
-      .sort({ dateTime: 1 });
-  },
+  if (filters?.serviceName) query.serviceName = filters.serviceName;
+
+  if (filters?.assignedStaff) {
+    query.assignedStaff = filters.assignedStaff;
+  } else {
+    // only appointments with staff assigned
+    query.assignedStaff = { $exists: true, $ne: null };
+  }
+
+  if (filters?.dateTime) {
+    const start = new Date(filters.dateTime);
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(filters.dateTime);
+    end.setHours(23, 59, 59, 999);
+
+    query.dateTime = { $gte: start, $lte: end };
+  }
+
+  return AppointmentModel.find(query)
+    .populate("assignedStaff")
+    .sort({ dateTime: 1 });
+},
+
 
   getUniqueServices: async () => {
     return ServiceModel.find({ isActive: true }).select(
