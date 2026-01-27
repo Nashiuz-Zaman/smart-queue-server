@@ -1,4 +1,5 @@
 import { Types } from "mongoose";
+import { TAppointmentStatus } from "../../constants/appointment";
 
 export interface IAppointment {
   _id?: Types.ObjectId;
@@ -7,7 +8,7 @@ export interface IAppointment {
   assignedStaff?: Types.ObjectId | null; // staff _id
   dateTime: Date;
   endTime: Date;
-  status: "Scheduled" | "Completed" | "Cancelled" | "No-Show";
+  status: TAppointmentStatus;
 }
 
 export interface IAppointmentFilter {

@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import { IAppointment } from "./appointment.type";
+import { APPOINTMENT_STATUSES } from "../../constants/appointment";
 
 // ----------------------------- Schema -----------------------------
 const appointmentSchema = new Schema<IAppointment>(
@@ -11,7 +12,7 @@ const appointmentSchema = new Schema<IAppointment>(
     endTime: { type: Date, required: true },
     status: {
       type: String,
-      enum: ["Scheduled", "Completed", "Cancelled", "No-Show"],
+      enum: APPOINTMENT_STATUSES,
       default: "Scheduled",
     },
   },
