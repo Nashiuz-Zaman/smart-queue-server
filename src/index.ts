@@ -14,7 +14,7 @@ import { errorMiddleware } from "./middlewares/error.middleware";
 
 const app = express();
 
-// app.set("trust proxy", 1);
+app.set("trust proxy", 1);
 app.use(
   cors({
     origin: ["https://smart-queue-client.vercel.app", "http://localhost:3000"],
